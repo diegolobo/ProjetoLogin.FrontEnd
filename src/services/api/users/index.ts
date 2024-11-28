@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 
-import { UserListResponse } from "@/app/usuarios/types";
+import { PostUser, UserListResponse } from "@/app/usuarios/types";
+import { getAccessToken } from "@/commons/storage/accessToken";
 import { api } from "..";
 import { RequestError } from "../RequestError";
 import { User } from "./types";
@@ -69,7 +70,12 @@ export const fetchUsers = async (
       url += `order=${order}`;
     }
 
-    const { data } = await api.get<UserListResponse>(url);
+    const { data } = await api.get<UserListResponse>(url, {
+        headers: {
+          Authorization: getAccessToken(),
+        }
+      }
+    );
     return data;
   } catch (e) {
     if (e instanceof AxiosError && e.response) {
@@ -81,7 +87,13 @@ export const fetchUsers = async (
 
 export const fetchUser = async (id: number) => {
   try {
-    const { data } = await api.get<User>(`${userApi}/${id}`);
+    const { data } = await api.get<User>(`${userApi}/${id}`,
+      {
+        headers: {
+          Authorization: getAccessToken(),
+        }
+      }
+    );
     return data;
   } catch (e) {
     if (e instanceof AxiosError && e.response) {
@@ -91,9 +103,13 @@ export const fetchUser = async (id: number) => {
   }
 };
 
-export const createUser = async (user: User) => {
+export const createUser = async (user: PostUser) => {
   try {
-    await api.post(userApi, user);
+    return await api.post(userApi, {
+      nome: user.nome,
+      email: user.email,
+      password: user.senha
+    });
   } catch (e) {
     if (e instanceof AxiosError && e.response) {
       throw new RequestError(e);
@@ -104,7 +120,12 @@ export const createUser = async (user: User) => {
 
 export const updateUser = async (user: User) => {
   try {
-    await api.put(`${userApi}/${user.id}`, user);
+    await api.put(`${userApi}/${user.id}`, user, {
+        headers: {
+          Authorization: getAccessToken(),
+        }
+      }
+    );
   } catch (e) {
     if (e instanceof AxiosError && e.response) {
       throw new RequestError(e);

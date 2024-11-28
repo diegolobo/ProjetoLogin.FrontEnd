@@ -1,6 +1,7 @@
 "use client";
 import { setAccessToken } from "@/commons/storage/accessToken";
 import { authenticate } from "@/services/api/users";
+import { checkUserAuthenticated } from "@/utils/checkUserAuthenticated";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -30,11 +31,14 @@ const Login: FC = () => {
       const token = await authenticate(email, password)
       if (token) {
         setAccessToken(token.toString());
-        router.push("/usuarios");
-        setAuthError(null);
-    } else {
-      setAuthError("Email ou senha inválidos");
-    }
+
+        if(checkUserAuthenticated()){
+          router.push("/usuarios");
+          setAuthError(null);
+        }        
+      } else {
+        setAuthError("Email ou senha inválidos");
+      }
     }catch(err){
       console.log(err)
     }

@@ -1,9 +1,14 @@
-export interface User {
-  id: number;
+export interface User extends PostUser {
+  id?: number;
+  tipoUsuario?: string;
+  status?: string;
+}
+
+export interface PostUser {
   nome: string;
   email: string;
-  tipoUsuario: string;
-  status: string;
+  senha?: string;
+  senhaConfirmacao?: string;
 }
 
 export interface UserFilter {
