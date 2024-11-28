@@ -12,8 +12,6 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     if (error.response && error.response.status === HttpStatusCode.Unauthorized) {
-      // removeAccessToken();
-      // location.href = APP_ROUTES.public.signin;
       console.log("Usuário não autenticado")
     }
     return Promise.reject(error);
