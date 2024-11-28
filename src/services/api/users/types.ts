@@ -5,7 +5,3 @@ export interface User {
   tipoUsuario: string;
   status: string;
 }
-
-export interface TableProps {
-  users: User[];
-}

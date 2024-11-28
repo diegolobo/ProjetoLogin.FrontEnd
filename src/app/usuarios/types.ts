@@ -1,12 +1,27 @@
 export interface User {
   id: number;
-  name: string;
+  nome: string;
   email: string;
-  phone: string;
-  website: string;
-  address: {
-    city: string;
-  };
+  tipoUsuario: string;
+  status: string;
+}
+
+export interface UserFilter {
+  id?: number;
+  name?: string;
+  email?: string;
+  userType?: string;
+  status?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  order?: string;
+}
+
+export interface UserListResponse {
+  users: User[];
+  totalItems: number;
+  currentPage: number;
+  totalPages: number;
 }
 
 export enum PaginationConfig {
